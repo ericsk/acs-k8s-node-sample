@@ -1,0 +1,19 @@
+{
+  "name": "dorabot",
+  "version": "0.0.1",
+  "description": "Doraemon Indexer Bot",
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./app.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.18",
+    "nodemon": "^1.11.0",
+    "ts-node": "^3.0.4",
+    "typescript": "^2.3.2"
+  },
+  "dependencies": {
+    "botbuilder": "^3.8.2",
+    "restify": "^4.3.0"
+  }
+}
