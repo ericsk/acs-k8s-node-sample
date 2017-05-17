@@ -1,5 +1,6 @@
-import * as botbuilder from "botbuilder";
+import * as builder from "botbuilder";
 import * as restify from "restify";
+import * as dialogs from "./dialogs";
 
 // create REST server.
 const server = restify.createServer({
@@ -11,13 +12,24 @@ server.listen( process.env.port || process.env.PORT || 3978, function() {
 });
 
 // Create chat connector for communicating with the Bot Framework Service
-var connector = new botbuilder.ChatConnector({
+var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
 
 server.post('/api/messages', connector.listen());
 
-var bot = new botbuilder.UniversalBot(connector, function(session) {
-    session.send("You said: %s", session.message.text);
+var bot = new builder.UniversalBot(connector, (session: builder.Session) => {
+    session.replaceDialog("HelpDialog");
 });
+
+// setup dialogs...
+
+bot.dialog("RecognizePicture", dialogs.RecognizeDialog)
+    .triggerAction({ matches: [ /Recognize/i ]});
+
+bot.dialog("RelationshipChecking", dialogs.RelationshipDialog)
+    .triggerAction({ matches: /relationships/i });
+
+bot.dialog("HelpDialog", dialogs.HelpDialog)
+    .triggerAction({ matches: /help/i });
